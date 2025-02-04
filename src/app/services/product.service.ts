@@ -17,37 +17,47 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
-  
-  getProductListPaginate(thePage: number, 
-                        thePageSize: number, 
-                        theCategoryId: number): Observable<GetResponseProducts>{
+
+  getProductListPaginate(thePage: number,
+    thePageSize: number,
+    theCategoryId: number): Observable<GetResponseProducts> {
 
     // need to build URL based on category id, page and size
-    const searchUrl = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}`;
+    const searchUrl = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}`
+      + `&page=${thePage}&size=${thePageSize}`;
 
-                    + `&page=${thePage}&size=${thePageSize}`
-    
     return this.http.get<GetResponseProducts>(searchUrl);
   }
-  
-  getProductList(theCategoryId: number): Observable<Product[]>{
+
+  getProductList(theCategoryId: number): Observable<Product[]> {
 
     // need to build URL based on category id
     const searchUrl = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}`;
-    
+
     return this.getProducts(searchUrl);
   }
 
   searchProducts(theKeyword: string): Observable<Product[]> {
-    
+
     // need to build URL based on the keyword
     const searchUrl = `${this.baseUrl}/search/findByNameContaining?name=${theKeyword}`;
 
     return this.getProducts(searchUrl);
   }
 
+  SearchProductsPaginate(thePage: number,
+                        thePageSize: number,
+                        theKeyword: string): Observable<GetResponseProducts> {
+
+    // need to build URL based on category id, page and size
+    const searchUrl = `${this.baseUrl}/search/findByNameContaining?name=${theKeyword}`
+                    + `&page=${thePage}&size=${thePageSize}`;
+
+    return this.http.get<GetResponseProducts>(searchUrl);
+  }
+
   getProduct(productId: number) {
-    
+
     // need to build the URL based on the product id
     const searchUrl = `${this.baseUrl}/${productId}`;
 
@@ -69,8 +79,8 @@ export class ProductService {
 
 }
 
-interface GetResponseProducts{
-  _embedded:{
+interface GetResponseProducts {
+  _embedded: {
     products: Product[];
   },
   page: {
@@ -81,8 +91,8 @@ interface GetResponseProducts{
   }
 }
 
-interface GetResponseProductCategory{
-  _embedded:{
+interface GetResponseProductCategory {
+  _embedded: {
     productCategory: ProductCategory[];
   }
 }
